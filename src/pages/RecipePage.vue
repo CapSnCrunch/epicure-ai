@@ -97,11 +97,8 @@
 <script setup>
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { generateRecipe, generateImage } from "../modules/recipeGeneration";
-import {
-  stringToKebabCase,
-  kebabCaseToLowerCaseWithSpaces,
-} from "@/modules/util.js";
+import { getRecipe } from "../modules/recipe.js";
+import { stringToKebabCase } from "@/modules/util.js";
 import { useDisplay } from "vuetify";
 
 const route = useRoute();
@@ -114,9 +111,8 @@ let imageUrl = ref("");
 const loadRecipe = async () => {
   loading.value = true;
 
-  let recipeName = kebabCaseToLowerCaseWithSpaces(route.params.recipeName);
-  recipe.value = await generateRecipe(recipeName);
-  // imageUrl.value = await generateImage(recipe.value.name);
+  let recipeId = stringToKebabCase(route.params.recipeId);
+  recipe.value = await getRecipe(recipeId);
 
   loading.value = false;
 };

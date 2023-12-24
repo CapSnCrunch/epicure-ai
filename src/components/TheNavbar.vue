@@ -54,7 +54,7 @@ const submit = async () => {
   router.push({
     name: "recipe",
     params: {
-      recipeName: stringToKebabCase(search.value),
+      recipeId: stringToKebabCase(search.value),
     },
   });
 };
