@@ -18,7 +18,7 @@
             :cols="mdAndDown ? 12 : 6"
             class="d-flex align-center justify-center"
           >
-            <img :src="imageUrl" width="512" height="512" />
+            <img :src="recipe.imageUrl" width="512" height="512" />
           </v-col>
           <v-col
             :cols="mdAndDown ? 12 : 6"
@@ -106,7 +106,6 @@ const { smAndDown, mdAndDown, xlAndUp } = useDisplay();
 
 let loading = ref(false);
 let recipe = ref(null);
-let imageUrl = ref("");
 
 const loadRecipe = async () => {
   loading.value = true;

@@ -34,9 +34,9 @@ recipeRouter.get('/recipes/:recipeId', async (req, res) => {
         const newRecipe = await openaiHelpers.generateRecipe(recipeId)
         
         // Generate Image
-        // const openaiImageUrl = await openaiHelpers.generateImage(recipeId)
-        // const firebaseImageUrl = await firebaseHelpers.uploadImageToFirebase(openaiImageUrl)
-        // newRecipe.imageUrl = firebaseImageUrl
+        const openaiImageUrl = await openaiHelpers.generateImage(recipeId)
+        const firebaseImageUrl = await firebaseHelpers.uploadImageToFirebase(openaiImageUrl)
+        newRecipe.imageUrl = firebaseImageUrl
 
         firebaseHelpers.uploadRecipeToFirebase(recipeId, newRecipe);
         res.status(200).json(newRecipe);

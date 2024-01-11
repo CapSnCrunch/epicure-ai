@@ -16,11 +16,11 @@ const validateRecipe = async (search) => {
             { 
                 role: "user", 
                 content: `Determine whether '${search}' is a reasonable and safe food / drink 
-                    to generate a recipe for. Respond in json format including a 'reasonable' value (either 
-                    true or false depending on whether the food / drink string provided is safe and reasonable
-                    to create and consume)  and 'reason' (a string explaining why the food is or is not reasonable)
-                    Mark any foods / drinks that contain words that have negative implications for food safety and 
-                    consumption as reasonable: false.`
+                    to generate a recipe for. Assume the recipe will be prepared properly.
+                    Respond in json format including a 'reasonable' value (either true or false depending on whether 
+                    the food / drink string provided is safe and reasonable to create and consume)  and 'reason' 
+                    (a string explaining why the food is or is not reasonable) Mark any foods / drinks that contain 
+                    words that have negative implications for food safety and consumption as reasonable: false.`
             },
         ],
         model: "gpt-3.5-turbo-1106",
@@ -65,10 +65,10 @@ const generateRecipe = async (search) => {
 const generateImage = async (search) => {
 
     const response = await openai.images.generate({
-        model: "dall-e-2",
-        prompt: ` ${search}, Cinematic, Editorial Photography, Photography, Shot on 70mm lens, Depth of Field, Bokeh, DOF, Tilt Blur, Shutter Speed 1/1000, F/22, White Balance, 32k, Super-Resolution`,
+        model: "dall-e-3",
+        prompt: ` ${search} delicious-looking food blog image, bright warm lighting, country-home tabletop, photorealistic food photography, super-resolution, depth of field`,
         n: 1,
-        size: "256x256",
+        size: "1024x1024",
     });
 
     const imageUrl = response.data[0].url;

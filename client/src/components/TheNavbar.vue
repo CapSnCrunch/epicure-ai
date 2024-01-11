@@ -5,7 +5,7 @@
     </template> -->
 
     <v-app-bar-title>
-      <div class="ml-4">EpicureAI</div>
+      <div class="ml-4">Recipes of Babel</div>
     </v-app-bar-title>
 
     <v-spacer></v-spacer>

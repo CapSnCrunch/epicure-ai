@@ -1,6 +1,6 @@
 const { initializeApp } = require("firebase/app");
 const { getFirestore, collection, setDoc, getDoc, doc } = require("firebase/firestore");
-const { getStorage, ref, uploadString, getDownloadURL } = require("firebase/storage");
+const { getStorage, ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { v4: uuidv4 } = require("uuid");
 
 // import { getAnalytics } from "firebase/analytics";
@@ -57,10 +57,13 @@ const uploadImageToFirebase = async (imageUrl) => {
     const imageRef = ref(storageRef, `images/${uuidv4()}.jpg`);
 
     const axios = require('axios');
-    const response = await axios.get(imageUrl);
-    const blob = await response.blob();
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
 
-    await uploadString(imageRef, blob, "data_url");
+    // Convert array buffer to buffer (for Node.js)
+    const buffer = Buffer.from(response.data);
+
+    // Upload the buffer to Firebase Storage
+    await uploadBytes(imageRef, buffer);
     console.log("Image uploaded to Firebase Storage");
 
     // Get the download URL of the uploaded image
@@ -69,7 +72,7 @@ const uploadImageToFirebase = async (imageUrl) => {
 
     return downloadURL;
   } catch (error) {
-    console.error("Error uploading image to Firebase:", error)
+    console.error("Error uploading image to Firebase:", error);
   }
 }
 

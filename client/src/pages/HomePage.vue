@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>EpicureAI</h1>
+    <h1>Recipes of Babel</h1>
   </v-container>
 </template>
 
