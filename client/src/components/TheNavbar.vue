@@ -5,7 +5,9 @@
     </template> -->
 
     <v-app-bar-title>
-      <div class="ml-4">Recipes of Babel</div>
+      <router-link :to="{ name: 'home' }">
+        <div class="ml-4">Epicure AI</div>
+      </router-link>
     </v-app-bar-title>
 
     <v-spacer></v-spacer>

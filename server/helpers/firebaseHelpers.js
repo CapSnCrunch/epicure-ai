@@ -1,5 +1,5 @@
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, setDoc, getDoc, doc } = require("firebase/firestore");
+const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, limit } = require("firebase/firestore");
 const { getStorage, ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { v4: uuidv4 } = require("uuid");
 
@@ -52,6 +52,26 @@ const getRecipeFromFirebase = async (recipeId) => {
   }
 }
 
+const getRecentRecipesFromFirebase = async (count) => {
+  try {
+    const querySnapshot = await getDocs(query(recipeCollection, limit(count)));
+
+    const recentRecipes = [];
+    querySnapshot.forEach((doc) => {
+      // Include both document data and ID in the result
+      recentRecipes.push({
+        recipeId: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    return recentRecipes;
+  } catch (error) {
+    console.error("Error getting recent recipes:", error);
+    return null;
+  }
+}
+
 const uploadImageToFirebase = async (imageUrl) => {
   try {
     const imageRef = ref(storageRef, `images/${uuidv4()}.jpg`);
@@ -79,5 +99,6 @@ const uploadImageToFirebase = async (imageUrl) => {
 module.exports = {
   uploadRecipeToFirebase,
   getRecipeFromFirebase,
+  getRecentRecipesFromFirebase,
   uploadImageToFirebase
 };

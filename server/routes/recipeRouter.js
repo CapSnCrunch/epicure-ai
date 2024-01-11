@@ -4,14 +4,26 @@ const recipeRouter = express.Router();
 const firebaseHelpers = require('../helpers/firebaseHelpers');
 const openaiHelpers = require('../helpers/openaiHelpers');
 
-// Define your route handler
+recipeRouter.get('/recipes/recent/:count', async (req, res) => {
+    const count = req.params.count;
+    console.log("Fetching recent recipes");
+  
+    try {
+        const recentRecipes = await firebaseHelpers.getRecentRecipesFromFirebase(count);
+        res.status(200).json(recentRecipes);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ 
+            error: 'Internal Server Error' 
+        });
+    }
+});
+
 recipeRouter.get('/recipes/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;
-
     console.log("Fetching recipe for ", recipeId);
     
     try {
-
         // Check for Recipe in Firebase
         const recipe = await firebaseHelpers.getRecipeFromFirebase(recipeId);
         if (recipe) {
@@ -40,14 +52,11 @@ recipeRouter.get('/recipes/:recipeId', async (req, res) => {
 
         firebaseHelpers.uploadRecipeToFirebase(recipeId, newRecipe);
         res.status(200).json(newRecipe);
-
     } catch (error) {
-
         console.error('Error:', error);
         res.status(500).json({ 
             error: 'Internal Server Error' 
         });
-
     }
 });
 

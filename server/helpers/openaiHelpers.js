@@ -16,7 +16,8 @@ const validateRecipe = async (search) => {
             { 
                 role: "user", 
                 content: `Determine whether '${search}' is a reasonable and safe food / drink 
-                    to generate a recipe for. Assume the recipe will be prepared properly.
+                    to generate a recipe for. Assume the recipe will be prepared properly. Alcoholic beverages
+                    are reasonable, just not anything that would unintentionally harm and adult.
                     Respond in json format including a 'reasonable' value (either true or false depending on whether 
                     the food / drink string provided is safe and reasonable to create and consume)  and 'reason' 
                     (a string explaining why the food is or is not reasonable) Mark any foods / drinks that contain 
@@ -66,7 +67,7 @@ const generateImage = async (search) => {
 
     const response = await openai.images.generate({
         model: "dall-e-3",
-        prompt: ` ${search} delicious-looking food blog image, bright warm lighting, country-home tabletop, photorealistic food photography, super-resolution, depth of field`,
+        prompt: ` ${search} delicious-looking food blog image, bright warm lighting, country-home tabletop with a table cloth with simple pattern, photorealistic food photography, super-resolution, depth of field`,
         n: 1,
         size: "1024x1024",
     });
