@@ -1,38 +1,43 @@
 <template>
   <v-toolbar fixed dense>
-    <!-- <template v-slot:prepend>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-    </template> -->
+    <v-container class="d-flex align-center" style="max-width: 960px">
+      <!-- <template v-slot:prepend>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      </template> -->
 
-    <v-app-bar-title>
-      <router-link :to="{ name: 'home' }">
-        <div class="ml-4">Epicure AI</div>
-      </router-link>
-    </v-app-bar-title>
+      <v-app-bar-title>
+        <router-link
+          :to="{ name: 'home' }"
+          style="text-decoration: none; color: inherit"
+        >
+          <div class="ml-4">Epicure AI</div>
+        </router-link>
+      </v-app-bar-title>
 
-    <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
 
-    <v-text-field
-      class="mr-4"
-      v-model="search"
-      density="compact"
-      variant="solo"
-      label="Search recipes"
-      append-inner-icon="mdi-magnify"
-      single-line
-      hide-details
-      @update:modelValue="limitSearch"
-      @click:append-inner="submit"
-      @keydown.enter="submit"
-    ></v-text-field>
+      <v-text-field
+        class="mr-4"
+        v-model="search"
+        density="compact"
+        variant="solo"
+        label="Search recipes"
+        append-inner-icon="mdi-magnify"
+        single-line
+        hide-details
+        @update:modelValue="limitSearch"
+        @click:append-inner="submit"
+        @keydown.enter="submit"
+      ></v-text-field>
 
-    <v-btn icon class="mr-2">
-      <v-icon>mdi-heart</v-icon>
-    </v-btn>
+      <v-btn icon class="mr-2">
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
 
-    <!-- <v-btn icon>
+      <!-- <v-btn icon>
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn> -->
+    </v-container>
   </v-toolbar>
 </template>
 

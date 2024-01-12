@@ -12,4 +12,11 @@ export const kebabCaseToLowerCaseWithSpaces = (str) => {
       .trim()
       .replace(/-/g, ' ') // Replace hyphens with spaces
       .toLowerCase(); // Convert to lowercase
-  };
+};
+
+export const extractFirstSentence = (str) => {
+    const indexOfPeriod = str.indexOf('.')
+    return indexOfPeriod !== -1 
+        ? str.substring(0, indexOfPeriod) + '.'
+        : str;
+};
