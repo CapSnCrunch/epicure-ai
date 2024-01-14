@@ -1,5 +1,5 @@
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, limit } = require("firebase/firestore");
+const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, limit, orderBy, writeBatch } = require("firebase/firestore");
 const { getStorage, ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { v4: uuidv4 } = require("uuid");
 
@@ -54,7 +54,7 @@ const getRecipeFromFirebase = async (recipeId) => {
 
 const getRecentRecipesFromFirebase = async (count) => {
   try {
-    const querySnapshot = await getDocs(query(recipeCollection, limit(count)));
+    const querySnapshot = await getDocs(query(recipeCollection, orderBy('createdOn', 'desc'), limit(count)));
 
     const recentRecipes = [];
     querySnapshot.forEach((doc) => {
@@ -68,6 +68,26 @@ const getRecentRecipesFromFirebase = async (count) => {
     return recentRecipes;
   } catch (error) {
     console.error("Error getting recent recipes:", error);
+    return null;
+  }
+}
+
+const getFavoriteRecipesFromFirebase = async (count) => {
+  try {
+    const querySnapshot = await getDocs(query(recipeCollection, orderBy('likes', 'desc'), limit(count)));
+
+    const favoriteRecipes = [];
+    querySnapshot.forEach((doc) => {
+      // Include both document data and ID in the result
+      favoriteRecipes.push({
+        recipeId: doc.id,
+        ...doc.data(),
+      });
+    });
+
+    return favoriteRecipes;
+  } catch (error) {
+    console.error("Error getting favorite recipes:", error);
     return null;
   }
 }
@@ -96,9 +116,46 @@ const uploadImageToFirebase = async (imageUrl) => {
   }
 }
 
+const batchUpdateFirebaseRecipes = async () => {
+  try {
+    const querySnapshot = await getDocs(recipeCollection);
+
+    const recentRecipes = [];
+    const batch = writeBatch(db);
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      // Include both document data and ID in the result
+      recentRecipes.push({
+        ...data,
+      });
+
+      // Check if the document doesn't have a createdOn timestamp
+      if (!data.likes) {
+        // Update the document with the createdOn timestamp in the batch
+        batch.update(doc.ref, {
+          likes: 0,
+        });
+      }
+    });
+
+    // Commit the batch to update documents in bulk
+    await batch.commit();
+
+    console.log("Successfully updated schema");
+    return true;
+  } catch (error) {
+    console.error("Error updating schema", error);
+    return false;
+  }
+};
+
 module.exports = {
   uploadRecipeToFirebase,
   getRecipeFromFirebase,
   getRecentRecipesFromFirebase,
-  uploadImageToFirebase
+  getFavoriteRecipesFromFirebase,
+  uploadImageToFirebase,
+  batchUpdateFirebaseRecipes
 };

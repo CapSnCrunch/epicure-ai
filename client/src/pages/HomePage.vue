@@ -15,7 +15,9 @@
           class="mb-10"
         >
           <v-row class="d-flex flex-column align-center">
-            <div class="background-primary mb-4">RECENT POST</div>
+            <div class="background-primary mb-4">
+              {{ recipe.recent ? "RECENT POST" : "FAVORITE POST" }}
+            </div>
 
             <h1 style="font-size: 24px; font-weight: 800">{{ recipe.name }}</h1>
             <h1
@@ -70,20 +72,35 @@
 <script setup>
 import { ref } from "vue";
 import { extractFirstSentence } from "@/modules/util";
-import { getRecentRecipes } from "../modules/recipe.js";
+import { getRecentRecipes, getFavoriteRecipes } from "../modules/recipe.js";
 // import { useDisplay } from "vuetify";
 // const { xlAndUp } = useDisplay();
 
 let loading = ref(false);
 let recipes = ref([]);
 
-const loadRecentRecipes = async () => {
+const loadRecipes = async () => {
   loading.value = true;
 
-  recipes.value = await getRecentRecipes(60);
+  const recentRecipes = await getRecentRecipes(6);
+  const favoriteRecipes = await getFavoriteRecipes(10);
+
+  recentRecipes.forEach((recipe) => {
+    recipes.value.push({
+      ...recipe,
+      recent: true,
+    });
+  });
+
+  favoriteRecipes.forEach((recipe) => {
+    recipes.value.push({
+      ...recipe,
+      favorite: true,
+    });
+  });
 
   loading.value = false;
 };
 
-loadRecentRecipes();
+loadRecipes();
 </script>

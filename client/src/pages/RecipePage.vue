@@ -1,18 +1,20 @@
 <template>
-  <v-container>
+  <v-container class="d-flex flex-column mt-8" style="max-width: 960px">
     <div v-if="loading">
       <h1>Loading...</h1>
     </div>
+    <div v-else-if="!loading && error != null">
+      <h1 style="font-size: 24px; font-weight: 800">Cannot Generate Recipe</h1>
+      <h1 style="font-size: 18px; font-weight: 400; margin-top: 10px">
+        {{ error }}
+      </h1>
+    </div>
     <div v-else class="d-flex flex-column align-center mt-4">
       <h1 style="font-size: 42px">{{ recipe.name }}</h1>
-      <p
-        class="mt-4 text-center"
-        :class="xlAndUp ? 'w-50' : 'w-100'"
-        style="font-size: 18px"
-      >
+      <p class="mt-4 text-center" style="font-size: 18px">
         {{ recipe.description }}
       </p>
-      <v-container class="d-flex mt-8" :class="xlAndUp ? 'w-75' : 'w-100'">
+      <v-container class="mt-8">
         <v-row class="d-flex">
           <v-col
             :cols="mdAndDown ? 12 : 6"
@@ -22,10 +24,10 @@
           </v-col>
           <v-col
             :cols="mdAndDown ? 12 : 6"
-            class="d-flex flex-column align-center"
+            class="d-flex flex-column justify-center align-center mb-14"
           >
             <h2>Ingredients</h2>
-            <ul class="mt-6 ml-10">
+            <ul class="mt-2 ml-8 pl-10">
               <li
                 v-for="(ingredient, ingredientIndex) of recipe.ingredients"
                 :key="`ingredient-${ingredientIndex}`"
@@ -52,10 +54,7 @@
           </li>
         </ol>
       </v-container>
-      <v-container
-        class="d-flex flex-column"
-        :class="xlAndUp ? 'w-75' : 'w-100'"
-      >
+      <v-container class="d-flex flex-column">
         <v-row><h2 class="mt-10">Similar Recipes</h2></v-row>
         <v-row class="d-flex justify-space-around mt-6">
           <v-col
@@ -70,10 +69,7 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-container
-        class="d-flex flex-column"
-        :class="xlAndUp ? 'w-75' : 'w-100'"
-      >
+      <v-container class="d-flex flex-column">
         <v-row><h2 class="mt-10">Complimentary Recipes</h2></v-row>
         <v-row class="d-flex justify-space-around mt-6">
           <v-col
@@ -106,12 +102,18 @@ const { smAndDown, mdAndDown, xlAndUp } = useDisplay();
 
 let loading = ref(false);
 let recipe = ref(null);
+let error = ref(null);
 
 const loadRecipe = async () => {
   loading.value = true;
 
   let recipeId = stringToKebabCase(route.params.recipeId);
-  recipe.value = await getRecipe(recipeId);
+  const response = await getRecipe(recipeId);
+  if (!response.error) {
+    recipe.value = response;
+  } else {
+    error.value = response.message;
+  }
 
   loading.value = false;
 };

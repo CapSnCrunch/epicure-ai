@@ -8,7 +8,7 @@
         background-repeat: repeat-x;
       "
     />
-    <TheNavbar />
+    <TheAppBar :class="{ 'fixed-background': isTop }" />
     <v-main>
       <router-view :key="$route.fullPath" />
     </v-main>
@@ -16,5 +16,26 @@
 </template>
 
 <script setup>
-import TheNavbar from "@/components/TheNavbar.vue";
+import TheAppBar from "@/components/TheAppBar.vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+const isTop = ref(true);
+
+const handleScroll = () => {
+  isTop.value = window.scrollY === 0;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
+
+<style>
+.fixed-background {
+  margin-top: 15px;
+}
+</style>

@@ -1,18 +1,37 @@
 <template>
-  <v-toolbar fixed dense>
+  <v-app-bar app elevation="0">
     <v-container class="d-flex align-center" style="max-width: 960px">
       <!-- <template v-slot:prepend>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
       </template> -->
 
-      <v-app-bar-title>
-        <router-link
-          :to="{ name: 'home' }"
-          style="text-decoration: none; color: inherit"
-        >
-          <div class="ml-4">Epicure AI</div>
-        </router-link>
-      </v-app-bar-title>
+      <router-link
+        :to="{ name: 'home' }"
+        style="text-decoration: none; color: inherit"
+      >
+        <h1 class="ml-4" style="font-size: 24px">Epicure AI</h1>
+      </router-link>
+
+      <router-link
+        :to="{ name: 'home' }"
+        style="text-decoration: none; color: inherit"
+      >
+        <div class="ml-8">Home</div>
+      </router-link>
+
+      <router-link
+        :to="{ name: 'home' }"
+        style="text-decoration: none; color: inherit"
+      >
+        <div class="ml-8">About</div>
+      </router-link>
+
+      <router-link
+        :to="{ name: 'home' }"
+        style="text-decoration: none; color: inherit"
+      >
+        <div class="ml-8">Subscribe</div>
+      </router-link>
 
       <v-spacer></v-spacer>
 
@@ -38,7 +57,7 @@
       <v-icon>mdi-dots-vertical</v-icon>
     </v-btn> -->
     </v-container>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script setup>
