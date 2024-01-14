@@ -1,8 +1,7 @@
 const { OpenAI } = require("openai");
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true
+    apiKey: process.env.OPENAI_API_KEY
 });
 
 const validateRecipe = async (search) => {
@@ -19,7 +18,7 @@ const validateRecipe = async (search) => {
                     to generate a recipe for. Assume the recipe will be prepared properly. Alcoholic beverages
                     are reasonable, just not anything that would unintentionally harm and adult.
                     Respond in json format including a 'reasonable' value (either true or false depending on whether 
-                    the food / drink string provided is safe and reasonable to create and consume)  and 'reason' 
+                    the food / drink string provided is safe and reasonable to create and consume) and 'reason' 
                     (a string of the form 'This recipe may be unsafe because...' explaining why the food is or is not reasonable) 
                     Mark any foods / drinks that contain words that have negative implications for food safety and consumption 
                     as reasonable: false.`

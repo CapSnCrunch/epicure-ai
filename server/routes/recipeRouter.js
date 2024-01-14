@@ -58,7 +58,7 @@ recipeRouter.get('/recipes/:recipeId', async (req, res) => {
             console.log('Found recipe in firestore', recipe);
             res.status(200).json(recipe);
             return;
-        } 
+        }
         
         // Validate Recipe
         const validation = await openaiHelpers.validateRecipe(recipeId)

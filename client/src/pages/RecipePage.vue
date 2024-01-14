@@ -1,7 +1,7 @@
 <template>
   <v-container class="d-flex flex-column mt-8" style="max-width: 960px">
-    <div v-if="loading">
-      <h1>Loading...</h1>
+    <div v-if="loading" class="d-flex justify-center mt-14">
+      <img src="../assets/food-loader.gif" width="300" height="300" />
     </div>
     <div v-else-if="!loading && error != null">
       <h1 style="font-size: 24px; font-weight: 800">Cannot Generate Recipe</h1>

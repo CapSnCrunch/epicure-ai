@@ -82,7 +82,7 @@ let recipes = ref([]);
 const loadRecipes = async () => {
   loading.value = true;
 
-  const recentRecipes = await getRecentRecipes(6);
+  const recentRecipes = await getRecentRecipes(100);
   const favoriteRecipes = await getFavoriteRecipes(10);
 
   recentRecipes.forEach((recipe) => {
