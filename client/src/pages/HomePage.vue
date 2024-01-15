@@ -15,7 +15,10 @@
           class="mb-10"
         >
           <v-row class="d-flex flex-column align-center">
-            <div class="background-primary mb-4">
+            <div
+              class="mb-4 py-2 px-4"
+              style="background-color: #a1ccec; color: white"
+            >
               {{ recipe.recent ? "RECENT POST" : "FAVORITE POST" }}
             </div>
 
@@ -82,7 +85,7 @@ let recipes = ref([]);
 const loadRecipes = async () => {
   loading.value = true;
 
-  const recentRecipes = await getRecentRecipes(100);
+  const recentRecipes = await getRecentRecipes(6);
   const favoriteRecipes = await getFavoriteRecipes(10);
 
   recentRecipes.forEach((recipe) => {

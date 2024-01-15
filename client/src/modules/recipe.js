@@ -17,6 +17,16 @@ export const getRecipe = async (recipeId) => {
 
 }
 
+export const searchRecipes = async (search) => {
+    
+    const url = `http://localhost:3000/api/recipes/search/${search}`
+    const recipes = await axios.get(url)
+
+    return recipes.data
+
+}
+
+
 export const getRecentRecipes = async (count) => {
     
     const url = `http://localhost:3000/api/recipes/recent/${count}`

@@ -1,5 +1,5 @@
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, limit, orderBy, writeBatch } = require("firebase/firestore");
+const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, where, orderBy, limit, writeBatch } = require("firebase/firestore");
 const { getStorage, ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { v4: uuidv4 } = require("uuid");
 
@@ -15,6 +15,7 @@ const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG) || {};
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const recipeCollection = collection(db, "recipes")
+const recipeIndexCollection = collection(db, "recipe-indexes")
 
 // Initialize Firebase Storage
 const storage = getStorage(firebaseApp); // Assuming firebaseApp is your initialized Firebase app
@@ -26,6 +27,33 @@ const uploadRecipeToFirebase = async (recipeId, recipe) => {
     return recipeId
   } catch (error) {
     console.error("Error creating recipe:", error)
+    return null
+  }
+}
+
+// const searchRecipesInFirebase = async (recipeSearch) => {
+//   const searchQuery = recipeSearch.toLowerCase();
+
+//   try {
+//     const snapshot = await getDocs(query(recipeCollection, where('name', '>=', searchQuery), where('name', '<=', searchQuery + '\uf8ff'), limit(20)));
+
+//     const recipes = [];
+//     snapshot.forEach(doc => {
+//       recipes.push(doc.data());
+//     });
+
+//     return recipes;
+//   } catch (error) {
+//     console.error('Error searching recipes:', error);
+//   }
+// }
+
+const getMostRecentRecipeIndexStringFromFirebase = async () => {
+  try {
+    const querySnapshot  = await getDocs(query(recipeIndexCollection, orderBy('createdOn', 'desc'), limit(1)));
+    return querySnapshot.docs[0].data().recipeIndex
+  } catch (error) {
+    console.error("Error getting recipe index string:", error)
     return null
   }
 }
@@ -145,6 +173,8 @@ const batchUpdateFirebaseRecipes = async () => {
 
 module.exports = {
   uploadRecipeToFirebase,
+  // searchRecipesInFirebase,
+  getMostRecentRecipeIndexStringFromFirebase,
   getRecipeFromFirebase,
   getRecentRecipesFromFirebase,
   getFavoriteRecipesFromFirebase,

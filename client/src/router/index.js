@@ -8,10 +8,12 @@ const routes = [
       {
         path: '',
         name: 'home',
-        // route level code-splitting
-        // this generates a separate chunk (HomePage-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import('@/pages/HomePage.vue'),
+      },
+      {
+        path: '/search/:search',
+        name: 'search',
+        component: () => import('@/pages/SearchPage.vue'),
       },
       {
         path: '/recipe/:recipeId',

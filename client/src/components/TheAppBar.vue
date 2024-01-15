@@ -40,7 +40,7 @@
         v-model="search"
         density="compact"
         variant="solo"
-        label="Search recipes"
+        label="Search for a recipe"
         append-inner-icon="mdi-magnify"
         single-line
         hide-details
@@ -78,9 +78,9 @@ const limitSearch = () => {
 
 const submit = async () => {
   router.push({
-    name: "recipe",
+    name: "search",
     params: {
-      recipeId: stringToKebabCase(search.value),
+      search: stringToKebabCase(search.value),
     },
   });
 };

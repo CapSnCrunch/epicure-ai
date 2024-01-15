@@ -3,6 +3,7 @@ const recipeRouter = express.Router();
 
 const firebaseHelpers = require('../helpers/firebaseHelpers');
 const openaiHelpers = require('../helpers/openaiHelpers');
+const utils = require('../helpers/utils')
 
 recipeRouter.get('/recipes/update-schema', async (req, res) => {
     const result = firebaseHelpers.batchUpdateFirebaseRecipes()
@@ -46,6 +47,62 @@ recipeRouter.get('/recipes/favorites/:count', async (req, res) => {
         });
     }
 });
+
+// OpenAI-based search
+recipeRouter.get('/recipes/search/:recipeId', async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipeIndex = await firebaseHelpers.getMostRecentRecipeIndexStringFromFirebase()
+  
+    try {
+        const searchRecipes = await openaiHelpers.searchRecipes(recipeId, recipeIndex);
+        
+        const similarRecipes = []
+        for (const similarRecipeId of searchRecipes.similarRecipes) {
+            let recipe = await firebaseHelpers.getRecipeFromFirebase(similarRecipeId)
+            similarRecipes.push({
+                ...recipe,
+                recipeId: similarRecipeId
+            });
+        }
+
+        const complimentaryRecipes = []
+        for (const complimentaryRecipeId of searchRecipes.complimentaryRecipes) {
+            let recipe = await firebaseHelpers.getRecipeFromFirebase(complimentaryRecipeId)
+            complimentaryRecipes.push({
+                ...recipe,
+                recipeId: complimentaryRecipeId
+            });
+        }
+
+        res.status(200).json({
+            similarRecipes,
+            complimentaryRecipes
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ 
+            error: 'Internal Server Error' 
+        });
+    }
+})
+
+// Firebase-based search
+// recipeRouter.get('/recipes/search/:recipeId', async (req, res) => {
+//     const recipeId = req.params.recipeId;
+//     const recipeSearch = utils.kebabCaseToLowerCaseWithSpaces(recipeId)
+
+//     console.log("Searching for recipes with substring", recipeSearch);
+  
+//     try {
+//         const searchRecipes = await firebaseHelpers.searchRecipesInFirebase(recipeSearch);
+//         res.status(200).json(searchRecipes);
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ 
+//             error: 'Internal Server Error' 
+//         });
+//     }
+// })
 
 recipeRouter.get('/recipes/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;

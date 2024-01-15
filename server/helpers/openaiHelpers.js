@@ -35,6 +35,35 @@ const validateRecipe = async (search) => {
 
 }
 
+const searchRecipes = async(search, indexString) => {
+
+    const completion = await openai.chat.completions.create({
+        messages: [
+            {
+                role: "system",
+                content: "You are a helpful assistant designed to output JSON.",
+            },
+            { 
+                role: "user", 
+                content: `For the following list of food/drink strings and the search term "${search}", 
+                    output valid JSON with the attribute 'similarRecipes' (a list of the food/drink strings 
+                    that closely match the concept of the search term) and 'complimentaryRecipes' (a list of 
+                    at least 3 of the food/drink strings that would go well in a meal with the search term". 
+                    Here is the list to search across: [${indexString}]. ONLY INCLUDE ITEMS IF THEY APPEAR IN
+                    THE ORIGINAL FOOD/DRINK STRING LIST. BE SURE TO RETURN VALUES EXACTLY AS THEY APPEAR IN THE
+                    FOOD/DRINK STRING LIST (INCLUDING HYPHENS).`
+            },
+        ],
+        model: "gpt-3.5-turbo-1106",
+        response_format: { type: "json_object" },
+    })
+    
+    const result = JSON.parse(completion.choices[0].message.content)
+    console.log('Found recipes', result)
+
+    return result
+}
+
 const generateRecipe = async (search) => {
 
     const completion = await openai.chat.completions.create({
@@ -81,6 +110,7 @@ const generateImage = async (search) => {
 
 module.exports = {
     validateRecipe,
+    searchRecipes,
     generateRecipe,
     generateImage
   };
