@@ -9,15 +9,7 @@ const { v4: uuidv4 } = require("uuid");
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: "epicure-ai.firebaseapp.com",
-  projectId: "epicure-ai",
-  storageBucket: "epicure-ai.appspot.com",
-  messagingSenderId: "421430875616",
-  appId: "1:421430875616:web:605fb10b1c06e590130785",
-  measurementId: "G-338T2GRZ1S"
-};
+const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG) || {};
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);

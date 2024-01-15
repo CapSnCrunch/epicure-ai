@@ -1,69 +1,30 @@
-# essentials
+# Epicure AI
+
+An AI blog that contains all recipes! Simply search for a food or drink and a full recipe complete with pictures will be created for you on the spot!
 
 ## Project setup
 
-```
-# yarn
-yarn
+### Client Side
 
-# npm
-npm install
+In the client folder, run `npm install`.
 
-# pnpm
-pnpm install
+### Server Side
 
-# bun
-bun install
-```
-
-### Compiles and hot-reloads for development
+In the server folder, create a `.env` file with the following structure:
 
 ```
-# yarn
-yarn dev
-
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# bun
-bun run dev
+NODE_ENV=development
+PORT=3000
+OPENAI_API_KEY=<YOUR_OPEN_AI_API_KEY>
+FIREBASE_CONFIG=<YOUR_JSON_STRINGIFIED_FIREBASE_CONFIG>
 ```
 
-### Compiles and minifies for production
+For example, my firebase config looks like `{ "apiKey": "...", "authDomain": "...", "projectId": "...", "storageBucket": "...", ... }`
 
-```
-# yarn
-yarn build
+Also run `npm install`.
 
-# npm
-npm run build
+## Running Locally
 
-# pnpm
-pnpm build
+In the client, run `npm run dev`. In a separate terminal, in the server folder, run `node app.js`.
 
-# bun
-bun run build
-```
-
-### Lints and fixes files
-
-```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
-
-# bun
-bun run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
+Open <a href="http://localhost:8080">http://localhost:8080</a> and get started making recipes!
