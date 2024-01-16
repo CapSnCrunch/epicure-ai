@@ -48,7 +48,7 @@ const searchRecipes = async(search, indexString) => {
                 content: `For the following list of food/drink strings and the search term "${search}", 
                     output valid JSON with the attribute 'similarRecipes' (a list of the food/drink strings 
                     that closely match the concept of the search term) and 'complimentaryRecipes' (a list of 
-                    at least 3 of the food/drink strings that would go well in a meal with the search term". 
+                    exactly 3 of the food/drink strings that would go well in a meal with the search term". 
                     Here is the list to search across: [${indexString}]. ONLY INCLUDE ITEMS IF THEY APPEAR IN
                     THE ORIGINAL FOOD/DRINK STRING LIST. BE SURE TO RETURN VALUES EXACTLY AS THEY APPEAR IN THE
                     FOOD/DRINK STRING LIST (INCLUDING HYPHENS).`

@@ -14,9 +14,9 @@
           v-for="recipe in recipes.similarRecipes"
           :key="recipe.name"
           cols="12"
-          md="3"
-          lg="3"
-          xl="3"
+          md="4"
+          lg="4"
+          xl="4"
           class="mb-10"
         >
           <v-row class="d-flex flex-column align-center">
@@ -38,7 +38,7 @@
           </v-row>
         </v-col>
 
-        <v-col cols="12" md="3" lg="3" xl="3" class="mb-10">
+        <v-col cols="12" md="4" lg="4" xl="4" class="mb-10">
           <v-row class="d-flex flex-column align-center">
             <h1 style="font-size: 16px; font-weight: 800; color: black">
               Generate a new recipe!
@@ -64,9 +64,9 @@
           v-for="recipe in recipes.complimentaryRecipes"
           :key="recipe.recipeId"
           cols="12"
-          md="3"
-          lg="3"
-          xl="3"
+          md="4"
+          lg="4"
+          xl="4"
           class="mb-10"
         >
           <v-row class="d-flex flex-column align-center">

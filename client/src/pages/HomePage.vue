@@ -4,6 +4,67 @@
       Epicure AI
     </h1>
     <v-container class="d-flex flex-column mt-8" style="max-width: 960px">
+      <v-row class="mb-4">
+        <v-col
+          cols="12"
+          md="3"
+          lg="3"
+          xl="3"
+          class="d-flex justify-center align-center"
+        >
+          <!-- <h1 style="font-size: 60px; font-weight: 800; margin: 20px 0">
+            how to make:
+          </h1> -->
+          <img src="../assets/how-to-make.png" width="250" />
+        </v-col>
+        <v-col v-for="recipe in howToMakeRecipes" :key="recipe.recipeId">
+          <v-row class="d-flex flex-column align-center">
+            <h1 style="font-size: 16px; font-weight: 800; text-align: center">
+              {{ recipe.name }}
+            </h1>
+
+            <router-link
+              class="mt-4"
+              :to="{
+                name: 'recipe',
+                params: {
+                  recipeId: recipe.recipeId,
+                },
+              }"
+            >
+              <img :src="recipe.imageUrl" width="200" height="200" />
+            </router-link>
+          </v-row>
+        </v-col>
+      </v-row>
+
+      <v-row
+        class="d-flex flex-column align-center justify-center"
+        style="margin-top: 70px"
+      >
+        <hr
+          class="w-100"
+          style="border: 0; height: 1px; background-color: lightgray"
+        />
+        <div
+          style="
+            background-color: #0b314b;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-top: -50px;
+          "
+        ></div>
+        <div
+          class="d-flex flex-column align-center justify-center"
+          style="color: white; margin-top: -155px"
+        >
+          <h1 style="font-size: 32px">more</h1>
+          <h1 style="font-size: 32px; margin-top: -15px">recipes</h1>
+          <h1 style="font-size: 32px; margin-top: -5px">&DoubleDownArrow;</h1>
+        </div>
+      </v-row>
+
       <v-row>
         <v-col
           v-for="recipe in recipes"
@@ -16,10 +77,12 @@
         >
           <v-row class="d-flex flex-column align-center">
             <div
-              class="mb-4 py-2 px-4"
+              class="mb-4 py-1 px-10"
               style="background-color: #a1ccec; color: white"
             >
-              {{ recipe.recent ? "RECENT POST" : "FAVORITE POST" }}
+              <h1 style="font-size: 14px">
+                {{ recipe.recent ? "RECENT POST" : "FAVORITE POST" }}
+              </h1>
             </div>
 
             <h1 style="font-size: 24px; font-weight: 800">{{ recipe.name }}</h1>
@@ -80,22 +143,26 @@ import { getRecentRecipes, getFavoriteRecipes } from "../modules/recipe.js";
 // const { xlAndUp } = useDisplay();
 
 let loading = ref(false);
+let howToMakeRecipes = ref([]);
 let recipes = ref([]);
 
 const loadRecipes = async () => {
   loading.value = true;
 
-  const recentRecipes = await getRecentRecipes(6);
-  const favoriteRecipes = await getFavoriteRecipes(10);
+  const howToMakeRecipesResult = await getFavoriteRecipes(3);
+  const recentRecipesResult = await getRecentRecipes(6);
+  const favoriteRecipesResult = await getFavoriteRecipes(10);
 
-  recentRecipes.forEach((recipe) => {
+  howToMakeRecipes.value = howToMakeRecipesResult;
+
+  recentRecipesResult.forEach((recipe) => {
     recipes.value.push({
       ...recipe,
       recent: true,
     });
   });
 
-  favoriteRecipes.forEach((recipe) => {
+  favoriteRecipesResult.forEach((recipe) => {
     recipes.value.push({
       ...recipe,
       favorite: true,
