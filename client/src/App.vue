@@ -12,11 +12,13 @@
     <v-main>
       <router-view :key="$route.fullPath" />
     </v-main>
+    <TheFooter st />
   </v-app>
 </template>
 
 <script setup>
 import TheAppBar from "@/components/TheAppBar.vue";
+import TheFooter from "@/components/TheFooter.vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const isTop = ref(true);

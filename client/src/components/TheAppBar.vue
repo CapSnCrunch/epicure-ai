@@ -9,28 +9,43 @@
         :to="{ name: 'home' }"
         style="text-decoration: none; color: inherit"
       >
-        <h1 class="ml-4" style="font-size: 24px">Epicure AI</h1>
+        <h1 class="mx-4" style="font-size: 20px">Epicure AI</h1>
       </router-link>
 
       <router-link
         :to="{ name: 'home' }"
         style="text-decoration: none; color: inherit"
       >
-        <div class="ml-8">Home</div>
+        <div class="ml-8">
+          <h1 style="font-size: 12px; font-weight: 400">HOME</h1>
+        </div>
       </router-link>
 
       <router-link
         :to="{ name: 'home' }"
         style="text-decoration: none; color: inherit"
       >
-        <div class="ml-8">About</div>
+        <div class="ml-8">
+          <h1 style="font-size: 12px; font-weight: 400">ABOUT</h1>
+        </div>
       </router-link>
 
       <router-link
         :to="{ name: 'home' }"
         style="text-decoration: none; color: inherit"
       >
-        <div class="ml-8">Subscribe</div>
+        <div class="ml-8">
+          <h1 style="font-size: 12px; font-weight: 400">SUBSCRIBE</h1>
+        </div>
+      </router-link>
+
+      <router-link
+        :to="{ name: 'home' }"
+        style="text-decoration: none; color: inherit"
+      >
+        <div class="ml-8">
+          <h1 style="font-size: 12px; font-weight: 400">CONTACT</h1>
+        </div>
       </router-link>
 
       <v-spacer></v-spacer>

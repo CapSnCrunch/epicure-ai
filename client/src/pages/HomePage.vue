@@ -151,7 +151,7 @@ const loadRecipes = async () => {
 
   const howToMakeRecipesResult = await getFavoriteRecipes(3);
   const recentRecipesResult = await getRecentRecipes(6);
-  const favoriteRecipesResult = await getFavoriteRecipes(10);
+  const favoriteRecipesResult = await getFavoriteRecipes(2);
 
   howToMakeRecipes.value = howToMakeRecipesResult;
 
