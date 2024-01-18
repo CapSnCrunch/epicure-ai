@@ -1,5 +1,5 @@
 const { initializeApp } = require("firebase/app");
-const { getFirestore, collection, setDoc, getDoc, getDocs, doc, query, where, orderBy, limit, writeBatch } = require("firebase/firestore");
+const { getFirestore, collection, setDoc, getDoc, getDocs, updateDoc, doc, query, where, orderBy, limit, writeBatch } = require("firebase/firestore");
 const { getStorage, ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { v4: uuidv4 } = require("uuid");
 
@@ -27,33 +27,6 @@ const uploadRecipeToFirebase = async (recipeId, recipe) => {
     return recipeId
   } catch (error) {
     console.error("Error creating recipe:", error)
-    return null
-  }
-}
-
-// const searchRecipesInFirebase = async (recipeSearch) => {
-//   const searchQuery = recipeSearch.toLowerCase();
-
-//   try {
-//     const snapshot = await getDocs(query(recipeCollection, where('name', '>=', searchQuery), where('name', '<=', searchQuery + '\uf8ff'), limit(20)));
-
-//     const recipes = [];
-//     snapshot.forEach(doc => {
-//       recipes.push(doc.data());
-//     });
-
-//     return recipes;
-//   } catch (error) {
-//     console.error('Error searching recipes:', error);
-//   }
-// }
-
-const getMostRecentRecipeIndexStringFromFirebase = async () => {
-  try {
-    const querySnapshot  = await getDocs(query(recipeIndexCollection, orderBy('createdOn', 'desc'), limit(1)));
-    return querySnapshot.docs[0].data().recipeIndex
-  } catch (error) {
-    console.error("Error getting recipe index string:", error)
     return null
   }
 }
@@ -169,15 +142,45 @@ const batchUpdateFirebaseRecipes = async () => {
     console.error("Error updating schema", error);
     return false;
   }
-};
+}
+
+const getMostRecentRecipeIndexStringFromFirebase = async () => {
+  try {
+    const querySnapshot  = await getDocs(query(recipeIndexCollection, orderBy('createdOn', 'desc'), limit(1)));
+    return querySnapshot.docs[0].data().recipeIndex
+  } catch (error) {
+    console.error("Error getting recipe index string:", error)
+    return null
+  }
+}
+
+const updateRecipeIndexInFirebase = async (recipeId) => {
+  try {
+    const querySnapshot = await getDocs(query(recipeIndexCollection, orderBy('createdOn', 'desc'), limit(1)));
+    const doc = querySnapshot.docs[0];
+
+    const currentRecipeIndex = doc.data().recipeIndex;
+    const updatedRecipeIndex = currentRecipeIndex + `,${recipeId}`;
+
+    try {
+      await updateDoc(doc.ref, { recipeIndex: updatedRecipeIndex });
+      console.log("Successfully updated recipe index");
+    } catch (error) {
+      console.error("Error updating recipe index:", error);
+    }
+  } catch (error) {
+    console.error("Error getting recipe index string:", error);
+    return null;
+  }
+}
 
 module.exports = {
   uploadRecipeToFirebase,
-  // searchRecipesInFirebase,
-  getMostRecentRecipeIndexStringFromFirebase,
   getRecipeFromFirebase,
   getRecentRecipesFromFirebase,
   getFavoriteRecipesFromFirebase,
   uploadImageToFirebase,
-  batchUpdateFirebaseRecipes
+  batchUpdateFirebaseRecipes,
+  getMostRecentRecipeIndexStringFromFirebase,
+  updateRecipeIndexInFirebase
 };

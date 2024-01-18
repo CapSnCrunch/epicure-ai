@@ -76,7 +76,7 @@ const generateRecipe = async (search) => {
                 role: "user", 
                 content: `Generate a recipe for '${search}'. Give me your response in JSON format
                     with fields for a tasty-sounding 'name' (a string with less 10 words), a 'description'
-                    (a string with at least 15 words), 'ingredients' (a list of strings), 'instructions'
+                    (a string with at least 5 sentences), 'ingredients' (a list of strings), 'instructions'
                     (a list of strings), 'similarRecipes' (a list of 5 strings with names of recipes with 
                     less than 10 words each), and 'complimentaryRecipes' (a list of 5 strings with names
                     of recipes that would pair well in a meal with this one, less than 10 words each).` 

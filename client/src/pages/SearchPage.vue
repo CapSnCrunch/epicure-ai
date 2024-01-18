@@ -1,5 +1,11 @@
 <template>
   <v-container class="d-flex flex-column align-center">
+    <h1 style="font-size: 60px; font-weight: 800; margin-top: 20px">
+      Epicure AI
+    </h1>
+    <h1 style="font-size: 32px; font-weight: 400">
+      The Omnivore's Oracle: Your Source for Every Recipe Ever Conceived
+    </h1>
     <div v-if="loading" class="d-flex justify-center mt-14">
       <img src="../assets/food-loader.gif" width="300" height="300" />
     </div>
@@ -8,7 +14,11 @@
       class="d-flex flex-column mt-8"
       style="max-width: 960px"
     >
-      <h1>Search results</h1>
+      <hr
+        class="w-100 mb-8"
+        style="border: 0; height: 1px; background-color: lightgray"
+      />
+      <h1>Search results for "{{ search }}"</h1>
       <v-row class="mt-6">
         <v-col
           v-for="recipe in recipes.similarRecipes"
@@ -17,13 +27,9 @@
           md="4"
           lg="4"
           xl="4"
-          class="mb-10"
+          class="mb-6"
         >
           <v-row class="d-flex flex-column align-center">
-            <h1 style="font-size: 16px; font-weight: 800; text-align: center">
-              {{ recipe.name }}
-            </h1>
-
             <router-link
               class="mt-4"
               :to="{
@@ -33,19 +39,19 @@
                 },
               }"
             >
-              <img :src="recipe.imageUrl" width="200" height="200" />
+              <img :src="recipe.imageUrl" width="275" height="275" />
             </router-link>
+            <h1 style="font-size: 20px; font-weight: 400; text-align: center">
+              {{ recipe.name }}
+            </h1>
           </v-row>
         </v-col>
 
-        <v-col cols="12" md="4" lg="4" xl="4" class="mb-10">
+        <v-col cols="12" md="4" lg="4" xl="4" class="mb-6">
           <v-row class="d-flex flex-column align-center">
-            <h1 style="font-size: 16px; font-weight: 800; color: black">
-              Generate a new recipe!
-            </h1>
             <router-link
               class="d-flex align-center justify-center mt-4"
-              style="background-color: #dbecf9; width: 200px; height: 200px"
+              style="background-color: #dbecf9; width: 275px; height: 275px"
               :to="{
                 name: 'recipe',
                 params: {
@@ -55,6 +61,9 @@
             >
               <img src="../assets/menu-book-icon.svg" width="48" height="48" />
             </router-link>
+            <h1 style="font-size: 20px; font-weight: 400; color: black">
+              Generate a new recipe!
+            </h1>
           </v-row>
         </v-col>
       </v-row>
@@ -67,13 +76,9 @@
           md="4"
           lg="4"
           xl="4"
-          class="mb-10"
+          class="mb-6"
         >
           <v-row class="d-flex flex-column align-center">
-            <h1 style="font-size: 16px; font-weight: 800; text-align: center">
-              {{ recipe.name }}
-            </h1>
-
             <router-link
               class="mt-4"
               :to="{
@@ -83,8 +88,11 @@
                 },
               }"
             >
-              <img :src="recipe.imageUrl" width="200" height="200" />
+              <img :src="recipe.imageUrl" width="275" height="275" />
             </router-link>
+            <h1 style="font-size: 20px; font-weight: 400; text-align: center">
+              {{ recipe.name }}
+            </h1>
           </v-row>
         </v-col>
       </v-row>

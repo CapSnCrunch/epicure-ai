@@ -1,9 +1,16 @@
 <template>
   <v-container class="d-flex flex-column align-center">
-    <h1 style="font-size: 60px; font-weight: 800; margin: 20px 0">
+    <h1 style="font-size: 60px; font-weight: 800; margin-top: 20px">
       Epicure AI
     </h1>
+    <h1 style="font-size: 32px; font-weight: 400">
+      The Omnivore's Oracle: Your Source for Every Recipe Ever Conceived
+    </h1>
     <v-container class="d-flex flex-column mt-8" style="max-width: 960px">
+      <hr
+        class="w-100 mb-16"
+        style="border: 0; height: 1px; background-color: lightgray"
+      />
       <v-row class="mb-4">
         <v-col
           cols="12"
@@ -65,7 +72,7 @@
         </div>
       </v-row>
 
-      <v-row>
+      <v-row class="mt-8">
         <v-col
           v-for="recipe in recipes"
           :key="recipe.recipeId"
@@ -78,9 +85,9 @@
           <v-row class="d-flex flex-column align-center">
             <div
               class="mb-4 py-1 px-10"
-              style="background-color: #a1ccec; color: white"
+              style="background-color: #76bef3; color: white"
             >
-              <h1 style="font-size: 14px">
+              <h1 style="font-size: 16px">
                 {{ recipe.recent ? "RECENT POST" : "FAVORITE POST" }}
               </h1>
             </div>
@@ -96,7 +103,7 @@
                 max-width: 380px;
               "
             >
-              {{ extractFirstSentence(recipe.description) }}
+              {{ recipe.description.substring(0, 140) }}...
             </h1>
 
             <router-link
@@ -107,7 +114,7 @@
                 },
               }"
             >
-              <img :src="recipe.imageUrl" width="400" height="400" />
+              <img :src="recipe.imageUrl" width="425px" height="425px" />
             </router-link>
 
             <hr
@@ -137,7 +144,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { extractFirstSentence } from "@/modules/util";
 import { getRecentRecipes, getFavoriteRecipes } from "../modules/recipe.js";
 // import { useDisplay } from "vuetify";
 // const { xlAndUp } = useDisplay();
@@ -149,11 +155,10 @@ let recipes = ref([]);
 const loadRecipes = async () => {
   loading.value = true;
 
-  const howToMakeRecipesResult = await getFavoriteRecipes(3);
+  const favoriteRecipesResult = await getFavoriteRecipes(7);
   const recentRecipesResult = await getRecentRecipes(6);
-  const favoriteRecipesResult = await getFavoriteRecipes(2);
 
-  howToMakeRecipes.value = howToMakeRecipesResult;
+  howToMakeRecipes.value = favoriteRecipesResult.slice(0, 3);
 
   recentRecipesResult.forEach((recipe) => {
     recipes.value.push({
@@ -162,7 +167,7 @@ const loadRecipes = async () => {
     });
   });
 
-  favoriteRecipesResult.forEach((recipe) => {
+  favoriteRecipesResult.slice(3).forEach((recipe) => {
     recipes.value.push({
       ...recipe,
       favorite: true,

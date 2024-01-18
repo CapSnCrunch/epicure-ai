@@ -48,7 +48,6 @@ recipeRouter.get('/recipes/favorites/:count', async (req, res) => {
     }
 });
 
-// OpenAI-based search
 recipeRouter.get('/recipes/search/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;
     const recipeIndex = await firebaseHelpers.getMostRecentRecipeIndexStringFromFirebase()
@@ -86,24 +85,6 @@ recipeRouter.get('/recipes/search/:recipeId', async (req, res) => {
     }
 })
 
-// Firebase-based search
-// recipeRouter.get('/recipes/search/:recipeId', async (req, res) => {
-//     const recipeId = req.params.recipeId;
-//     const recipeSearch = utils.kebabCaseToLowerCaseWithSpaces(recipeId)
-
-//     console.log("Searching for recipes with substring", recipeSearch);
-  
-//     try {
-//         const searchRecipes = await firebaseHelpers.searchRecipesInFirebase(recipeSearch);
-//         res.status(200).json(searchRecipes);
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ 
-//             error: 'Internal Server Error' 
-//         });
-//     }
-// })
-
 recipeRouter.get('/recipes/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;
     console.log("Fetching recipe for ", recipeId);
@@ -138,6 +119,7 @@ recipeRouter.get('/recipes/:recipeId', async (req, res) => {
         newRecipe.imageUrl = firebaseImageUrl
 
         firebaseHelpers.uploadRecipeToFirebase(recipeId, newRecipe);
+        firebaseHelpers.updateRecipeIndexInFirebase(recipeId);
         res.status(200).json(newRecipe);
     } catch (error) {
         console.error('Error:', error);

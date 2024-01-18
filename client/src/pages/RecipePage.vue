@@ -11,7 +11,7 @@
     </div>
     <div v-else class="d-flex flex-column align-center mt-4">
       <h1 style="font-size: 42px">{{ recipe.name }}</h1>
-      <p class="mt-4 text-center" style="font-size: 18px">
+      <p class="mt-4 text-center" style="font-size: 22px">
         {{ recipe.description }}
       </p>
       <v-container class="mt-8">
@@ -26,12 +26,13 @@
             :cols="mdAndDown ? 12 : 6"
             class="d-flex flex-column justify-center align-center mb-14"
           >
-            <h2>Ingredients</h2>
+            <h2 style="font-size: 32px">Ingredients</h2>
             <ul class="mt-2 ml-8 pl-10">
               <li
                 v-for="(ingredient, ingredientIndex) of recipe.ingredients"
                 :key="`ingredient-${ingredientIndex}`"
                 class="mt-2"
+                style="font-size: 20px"
               >
                 {{ ingredient }}
               </li>
@@ -43,19 +44,22 @@
         class="d-flex flex-column justify-space-between"
         :class="xlAndUp ? 'w-75' : 'w-100'"
       >
-        <h2>Instructions</h2>
+        <h2 style="font-size: 32px">Instructions</h2>
         <ol class="mt-2 ml-10">
           <li
             v-for="(instruction, instructionIndex) of recipe.instructions"
             :key="`instruction-${instructionIndex}`"
             class="mt-4"
+            style="font-size: 20px"
           >
             {{ instruction }}
           </li>
         </ol>
       </v-container>
       <v-container class="d-flex flex-column">
-        <v-row><h2 class="mt-10">Similar Recipes</h2></v-row>
+        <v-row
+          ><h2 class="mt-10" style="font-size: 32px">Similar Recipes</h2></v-row
+        >
         <v-row class="d-flex justify-space-around mt-6">
           <v-col
             v-for="similarRecipe of recipe.similarRecipes"
@@ -63,14 +67,23 @@
             :cols="smAndDown ? 12 : mdAndDown ? 4 : 2"
             class="d-flex justify-center"
           >
-            <router-link :to="`/recipe/${stringToKebabCase(similarRecipe)}`">
-              {{ similarRecipe }}
+            <router-link
+              style="text-decoration: underline; color: #5d90b5"
+              :to="`/recipe/${stringToKebabCase(similarRecipe)}`"
+            >
+              <h1 style="font-size: 20px; font-weight: 400">
+                {{ similarRecipe }}
+              </h1>
             </router-link>
           </v-col>
         </v-row>
       </v-container>
       <v-container class="d-flex flex-column">
-        <v-row><h2 class="mt-10">Complimentary Recipes</h2></v-row>
+        <v-row
+          ><h2 class="mt-10" style="font-size: 32px">
+            Complimentary Recipes
+          </h2></v-row
+        >
         <v-row class="d-flex justify-space-around mt-6">
           <v-col
             v-for="complimentaryRecipe of recipe.complimentaryRecipes"
@@ -79,9 +92,12 @@
             class="d-flex justify-center"
           >
             <router-link
+              style="text-decoration: underline; color: #5d90b5"
               :to="`/recipe/${stringToKebabCase(complimentaryRecipe)}`"
             >
-              {{ complimentaryRecipe }}
+              <h1 style="font-size: 20px; font-weight: 400">
+                {{ complimentaryRecipe }}
+              </h1>
             </router-link>
           </v-col>
         </v-row>

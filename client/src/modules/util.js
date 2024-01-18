@@ -14,9 +14,8 @@ export const kebabCaseToLowerCaseWithSpaces = (str) => {
       .toLowerCase(); // Convert to lowercase
 };
 
-export const extractFirstSentence = (str) => {
-    const indexOfPeriod = str.indexOf('.')
-    return indexOfPeriod !== -1 
-        ? str.substring(0, indexOfPeriod) + '.'
-        : str;
+export const extractSentences = (str, sentenceCount) => {
+    const sentences = str.split('.').map(sentence => sentence.trim()).filter(sentence => sentence.length > 0);
+    const firstNSentences = sentences.slice(0, sentenceCount);
+    return firstNSentences.join('. ') + '.';
 };

@@ -6,6 +6,7 @@
       background-size: 30px 15px;
       background-repeat: repeat-x;
       transform: scaleY(-1);
+      margin-top: 100px;
     "
   />
   <v-footer style="background-color: #5d90b5; height: 400px">

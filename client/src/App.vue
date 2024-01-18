@@ -12,7 +12,7 @@
     <v-main>
       <router-view :key="$route.fullPath" />
     </v-main>
-    <TheFooter st />
+    <TheFooter />
   </v-app>
 </template>
 
