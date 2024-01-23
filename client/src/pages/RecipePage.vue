@@ -10,10 +10,11 @@
       </h1>
     </div>
     <div v-else class="d-flex flex-column align-center mt-4">
-      <h1 style="font-size: 42px">{{ recipe.name }}</h1>
-      <p class="mt-4 text-center" style="font-size: 22px">
-        {{ recipe.description }}
-      </p>
+      <h1 style="font-size: 48px">{{ recipe.name }}</h1>
+      <h1 style="font-size: 32px; font-weight: 400; text-align: center">
+        {{ recipe.shortDescription }}
+      </h1>
+
       <v-container class="mt-8">
         <v-row class="d-flex">
           <v-col
@@ -24,12 +25,55 @@
           </v-col>
           <v-col
             :cols="mdAndDown ? 12 : 6"
+            class="d-flex align-center justify-center"
+          >
+            <p class="ml-12" style="font-size: 20px">
+              {{ splitSentences(recipe.description)[0] }}
+            </p>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <p class="mt-4" style="font-size: 20px">
+        {{ splitSentences(recipe.description)[1] }}
+      </p>
+
+      <v-container class="mt-8">
+        <v-row class="d-flex justify-center">
+          <h2 style="font-size: 32px">Ingredients</h2>
+        </v-row>
+        <v-row class="d-flex">
+          <v-col
+            :cols="mdAndDown ? 12 : 6"
             class="d-flex flex-column justify-center align-center mb-14"
           >
-            <h2 style="font-size: 32px">Ingredients</h2>
             <ul class="mt-2 ml-8 pl-10">
               <li
-                v-for="(ingredient, ingredientIndex) of recipe.ingredients"
+                v-for="(
+                  ingredient, ingredientIndex
+                ) of recipe.ingredients.slice(
+                  Math.ceil(recipe.ingredients.length / 2)
+                )"
+                :key="`ingredient-${ingredientIndex}`"
+                class="mt-2"
+                style="font-size: 20px"
+              >
+                {{ ingredient }}
+              </li>
+            </ul>
+          </v-col>
+          <v-col
+            :cols="mdAndDown ? 12 : 6"
+            class="d-flex flex-column justify-center align-center mb-14"
+          >
+            <ul class="mt-2 ml-8 pl-10">
+              <li
+                v-for="(
+                  ingredient, ingredientIndex
+                ) of recipe.ingredients.slice(
+                  0,
+                  Math.ceil(recipe.ingredients.length / 2)
+                )"
                 :key="`ingredient-${ingredientIndex}`"
                 class="mt-2"
                 style="font-size: 20px"
@@ -40,10 +84,8 @@
           </v-col>
         </v-row>
       </v-container>
-      <v-container
-        class="d-flex flex-column justify-space-between"
-        :class="xlAndUp ? 'w-75' : 'w-100'"
-      >
+
+      <v-container class="d-flex flex-column justify-space-between w-100">
         <h2 style="font-size: 32px">Instructions</h2>
         <ol class="mt-2 ml-10">
           <li
@@ -56,6 +98,25 @@
           </li>
         </ol>
       </v-container>
+
+      <v-container
+        v-if="recipe.tips"
+        class="d-flex flex-column justify-space-between w-100 mt-6"
+      >
+        <h2 style="font-size: 32px">Recipe Tips</h2>
+        <div
+          v-for="(tip, tipIndex) of recipe.tips"
+          :key="`tip-${tipIndex}`"
+          class="mt-6"
+          style="font-size: 20px"
+        >
+          <span style="font-weight: 800">
+            {{ splitAroundFirstPeriodOrComma(tip)[0] }},
+          </span>
+          {{ splitAroundFirstPeriodOrComma(tip)[1] }}
+        </div>
+      </v-container>
+
       <v-container class="d-flex flex-column">
         <v-row
           ><h2 class="mt-10" style="font-size: 32px">Similar Recipes</h2></v-row
@@ -78,6 +139,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <v-container class="d-flex flex-column">
         <v-row
           ><h2 class="mt-10" style="font-size: 32px">
@@ -110,11 +172,15 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { getRecipe } from "../modules/recipe.js";
-import { stringToKebabCase } from "@/modules/util.js";
+import {
+  splitSentences,
+  stringToKebabCase,
+  splitAroundFirstPeriodOrComma,
+} from "@/modules/util.js";
 import { useDisplay } from "vuetify";
 
 const route = useRoute();
-const { smAndDown, mdAndDown, xlAndUp } = useDisplay();
+const { smAndDown, mdAndDown } = useDisplay();
 
 let loading = ref(false);
 let recipe = ref(null);

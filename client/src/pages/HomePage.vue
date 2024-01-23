@@ -155,8 +155,8 @@ let recipes = ref([]);
 const loadRecipes = async () => {
   loading.value = true;
 
+  const recentRecipesResult = await getRecentRecipes(12);
   const favoriteRecipesResult = await getFavoriteRecipes(7);
-  const recentRecipesResult = await getRecentRecipes(6);
 
   howToMakeRecipes.value = favoriteRecipesResult.slice(0, 3);
 

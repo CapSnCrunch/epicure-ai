@@ -108,18 +108,35 @@ recipeRouter.get('/recipes/:recipeId', async (req, res) => {
             return
         }
 
-        // Generate Recipe
-        const newRecipe = await openaiHelpers.generateRecipe(recipeId)
-        newRecipe.createdOn = new Date(new Date().toUTCString())
-        newRecipe.likes = 0
+        // Generate Recipe Name
+        const newRecipeName = await openaiHelpers.generateRecipeName(recipeId)
         
-        // Generate Image
-        const openaiImageUrl = await openaiHelpers.generateImage(recipeId)
-        const firebaseImageUrl = await firebaseHelpers.uploadImageToFirebase(openaiImageUrl)
-        newRecipe.imageUrl = firebaseImageUrl
+        const [newRecipe, openaiImageUrl] = await Promise.all([
+            (async () => {
+                const recipe = await openaiHelpers.generateRecipe(newRecipeName);
+                recipe.createdOn = new Date(new Date().toUTCString());
+                recipe.likes = 0;
+                return recipe;
+            })(),
+            openaiHelpers.generateImage(newRecipeName),
+        ]);
+        
+        console.log(newRecipe)
+        console.log(openaiImageUrl)
 
-        firebaseHelpers.uploadRecipeToFirebase(recipeId, newRecipe);
-        firebaseHelpers.updateRecipeIndexInFirebase(recipeId);
+        // Concurrently execute additional tasks using Promise.all
+        const [firebaseImageUrl] = await Promise.all([
+            firebaseHelpers.uploadImageToFirebase(openaiImageUrl),
+        ]);
+    
+        // Update newRecipe and call the remaining functions concurrently
+        newRecipe.imageUrl = firebaseImageUrl;
+    
+        await Promise.all([
+            firebaseHelpers.uploadRecipeToFirebase(recipeId, newRecipe),
+            firebaseHelpers.updateRecipeIndexInFirebase(recipeId),
+        ]);
+  
         res.status(200).json(newRecipe);
     } catch (error) {
         console.error('Error:', error);

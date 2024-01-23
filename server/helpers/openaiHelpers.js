@@ -64,7 +64,8 @@ const searchRecipes = async(search, indexString) => {
     return result
 }
 
-const generateRecipe = async (search) => {
+
+const generateRecipeName = async (search) => {
 
     const completion = await openai.chat.completions.create({
         messages: [
@@ -74,12 +75,8 @@ const generateRecipe = async (search) => {
             },
             { 
                 role: "user", 
-                content: `Generate a recipe for '${search}'. Give me your response in JSON format
-                    with fields for a tasty-sounding 'name' (a string with less 10 words), a 'description'
-                    (a string with at least 5 sentences), 'ingredients' (a list of strings), 'instructions'
-                    (a list of strings), 'similarRecipes' (a list of 5 strings with names of recipes with 
-                    less than 10 words each), and 'complimentaryRecipes' (a list of 5 strings with names
-                    of recipes that would pair well in a meal with this one, less than 10 words each).` 
+                content: `Generate a tasy-sounding recipe name for '${search}'. Give your response in JSON format
+                    with the field 'name' (a string with less 10 words with the first letter of each word capitalized).` 
             },
         ],
         model: "gpt-3.5-turbo-1106",
@@ -87,9 +84,57 @@ const generateRecipe = async (search) => {
     })
     
     const result = JSON.parse(completion.choices[0].message.content)
-    console.log('Generated Recipe', result)
+    console.log('Generated Recipe Name', result?.name)
+
+    return result?.name
+
+} 
+
+const generateRecipe = async (recipeName) => {
+  
+    // Concurrently execute field generation tasks using Promise.all
+    const [description, ingredientsAndInstructions, similarRecipes, complimentaryRecipes, tips] = await Promise.all([
+        generateField(recipeName, "shortDescription (a string with a short description of the recipe using about 10 words) and description (a string with at least 10 sentences explaining why the recipe is so great and how tasty it is). DO NOT REFERENCE THE RECIPE NAME IN THE FIRST SENTENCE."),
+        generateField(recipeName, "ingredients (a list of strings with specific measurements) and instructions (a list of strings with detailed steps incorporating the ingredients)"),
+        generateField(recipeName, "similarRecipes (a list of 5 strings with names of recipes with less than 10 words each)"),
+        generateField(recipeName, "complimentaryRecipes (a list of 5 strings with names of recipes that would pair well in a meal with this one, less than 10 words each)"),
+        generateField(recipeName, "tips (a list of 3 strings with at least 3 sentences each explaining tips that would help make the recipe)"),
+    ]);
+
+    const result = {
+        name: recipeName,
+        shortDescription: description?.shortDescription,
+        description: description?.description,
+        ingredients: ingredientsAndInstructions?.ingredients,
+        instructions: ingredientsAndInstructions?.instructions,
+        similarRecipes: similarRecipes?.similarRecipes,
+        complimentaryRecipes: complimentaryRecipes?.complimentaryRecipes,
+        tips: tips?.tips
+    }
 
     return result
+}
+
+async function generateField(recipeName, field) {
+  
+    // Call OpenAI API to generate the field
+    const response = await openai.chat.completions.create({
+        messages: [
+            {
+                role: "system",
+                content: "You are a helpful recipe-crafting assistant designed to output JSON.",
+            },
+            {
+                role: "user",
+                content: `Generate a portion of a recipe for '${recipeName}'. Give your response in JSON format with the first-level field(s) ${field}.`,
+            }
+        ],
+        model: "gpt-3.5-turbo-1106",
+        response_format: { type: "json_object" },
+    });
+  
+    // Extract and return the generated field content
+    return JSON.parse(response.choices[0]?.message?.content) || {};
 }
 
 const generateImage = async (search) => {
@@ -101,16 +146,13 @@ const generateImage = async (search) => {
         size: "1024x1024",
     });
 
-    const imageUrl = response.data[0].url;
-    console.log('Generated Image', imageUrl)
-
-    return imageUrl
-
+    return response.data[0].url
 }
 
 module.exports = {
     validateRecipe,
     searchRecipes,
+    generateRecipeName,
     generateRecipe,
     generateImage
   };
