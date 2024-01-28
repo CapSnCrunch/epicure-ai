@@ -19,7 +19,9 @@ OPENAI_API_KEY=<YOUR_OPEN_AI_API_KEY>
 FIREBASE_CONFIG=<YOUR_JSON_STRINGIFIED_FIREBASE_CONFIG>
 ```
 
-For example, my firebase config looks like `{ "apiKey": "...", "authDomain": "...", "projectId": "...", "storageBucket": "...", ... }`
+For example, my firebase config looks like `{ "apiKey": "...", "authDomain": "...", "projectId": "...", "storageBucket": "...", ... }`.
+
+Be sure to load some credits onto your OpenAI account. Recipe generation only costs around $0.05 per recipe, so you should not need to start with more than $5.
 
 Also run `npm install`.
 
