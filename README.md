@@ -2,6 +2,10 @@
 
 An AI blog that contains all recipes! Simply search for a food or drink and a full recipe complete with pictures will be created for you on the spot!
 
+<p align='center'>
+  <img src='imgs/home-page.PNG' width='500'>
+</p>
+
 ## Project setup
 
 ### Client Side
